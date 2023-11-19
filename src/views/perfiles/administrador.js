@@ -9,9 +9,16 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { useAuth } from "../../context/AuthContext";
 import Swal from "sweetalert2";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+  updateDoc, // Add this import
+} from "firebase/firestore";
 import { ref, uploadBytes } from "firebase/storage";
 import { storage, firestore } from "../../config/firebase";
+import { getDownloadURL } from "firebase/storage";
+
 
 export const colores = [
   { value: "SN", label: "SN" },
@@ -68,6 +75,9 @@ function Administrador() {
     }
 
     try {
+      // Desactivar el botón de envío mientras se carga la imagen
+      document.getElementById("submit-button").disabled = true;
+
       const productosCollection = collection(firestore, "productos");
 
       const newProduct = {
@@ -81,8 +91,20 @@ function Administrador() {
 
       const docRef = await addDoc(productosCollection, newProduct);
 
+      // Subir la imagen al almacenamiento de Firebase
       const storageRef = ref(storage, `productos/${docRef.id}/${imagen.name}`);
       await uploadBytes(storageRef, imagen);
+
+      // Obtener la URL de la imagen
+      const imageURL = await getDownloadURL(storageRef);
+
+      // Actualizar el documento de producto con la URL de la imagen
+      await updateDoc(docRef, {
+        imageURL: imageURL,
+      });
+
+      // Habilitar el botón de envío después de cargar la imagen
+      document.getElementById("submit-button").disabled = false;
 
       Swal.fire({
         icon: "success",
@@ -101,6 +123,9 @@ function Administrador() {
       setPreviewUrl(null);
     } catch (error) {
       console.error("Error al agregar el producto:", error);
+
+      // Habilitar el botón de envío en caso de error
+      document.getElementById("submit-button").disabled = false;
 
       Swal.fire({
         icon: "error",
@@ -231,6 +256,7 @@ function Administrador() {
               </Grid>
               <Grid item xs={12}>
                 <Button
+                  id="submit-button" // Añadir un identificador al botón de envío
                   type="submit"
                   variant="contained"
                   sx={{
