@@ -28,24 +28,23 @@ const Calzado = () => {
 
   const [color, setColor] = useState("");
   const [talla, setTalla] = useState("");
-  const [marca, setMarca] = useState("");
-  const [genero, setGenero] = useState("");
   const [proyectos, setProyectos] = useState([]);
 
   const obtenerInfo = async () => {
     const docList = await app.firestore().collection("productos").get();
-    const data = docList.docs.filter(
-      (doc) => doc.data().categoria === "calzado"
-    );
-    setProyectos(data);
-    // console.log(data)
-    // setDocs(listHombre);
-    // setTablaProyectos(listHombre);
+    if (!docList.empty) {
+      const proyectosArray = docList.docs.map(doc => ({
+        id: doc.id,
+        data: doc.data(),
+      }));
+      setProyectos(proyectosArray);
+    }
   };
 
   useEffect(() => {
     obtenerInfo();
   }, []);
+
 
   return (
     <Box sx={{ bgcolor: "background.paper" }}>
