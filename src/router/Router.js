@@ -14,7 +14,8 @@ import Calzado from "../views/Store/Calzado/Calzado";
 import Equipamiento from "../views/Store/Equipamiento/Equipamiento";
 import Nutricion from "../views/Store/Nutricion/Nutricion";
 import ScrollToTop from '../components/items/ScrollToTop';
-
+import Consultador from "../views/perfiles/consultador"
+import Administrador from "../views/perfiles/administrador"
 export const Router = () => {
   return (
     <BrowserRouter>
@@ -26,6 +27,8 @@ export const Router = () => {
             <Route path='/sobre-nosotros' element={<Nosotros/>} />
             <Route path='/acceso' element={<Acceso/>} />
             <Route path='/registro' element={<Registro/>} />
+            <Route path='/consultador' element={<Consultador/>} />
+            <Route path='/administrador' element={<Administrador/>} />
             <Route path='/terminos-y-condiciones' element={<TerminosCondiciones/>} />
             <Route path='/politicas-de-privacidad' element={<Politicas/>} />
 

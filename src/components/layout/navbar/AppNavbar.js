@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -30,9 +30,10 @@ import { FaEllipsisV } from "react-icons/fa";
 import { AnimatedIcon } from "./componentsNavBar";
 import { db } from "../../../config/firebase";
 import { useAuth } from "../../../context/AuthContext";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 function HideOnScroll(props) {
   const { children, window } = props;
- 
+
   const trigger = useScrollTrigger({
     target: window ? window() : undefined,
   });
@@ -60,12 +61,33 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 }));
 
 export const AppNavbar = (props) => {
-   const { logout, user } = useAuth();
+  
   const [mobileOpen, setMobileOpen] = useState(false);
   const menuId = "primary-search-account-menu";
   const mobileMenuId = "primary-search-account-menu-mobile";
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+  const { logout, user } = useAuth();
+  const [data, setData] = useState();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (user) {
+        try {
+          const userDocRef =doc(db, `usuarios/${user.uid}`);
+          const userDocSnap = await getDoc(userDocRef);
+
+          if (userDocSnap.exists()) {
+            setData(userDocSnap.data());
+          }
+        } catch (error) {
+          console.error("Error al obtener datos del usuario:", error);
+        }
+      }
+    };
+
+    fetchData();
+  }, [user]);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -140,37 +162,40 @@ export const AppNavbar = (props) => {
   };
   // const handleMenuClick = user ? handleLogout : handleLogin;
   // const handleMenuClick = user ? handleLogout : handleLogin;
+  console.log("user:", user);
+  console.log("user:", user);
+  console.log("data:", data);
   const renderMobileMenu = (
     <Menu
-    anchorEl={mobileMoreAnchorEl}
-    anchorOrigin={{
-      vertical: "top",
-      horizontal: "right",
-    }}
-    id={mobileMenuId}
-    keepMounted
-    transformOrigin={{
-      vertical: "top",
-      horizontal: "right",
-    }}
-    open={isMobileMenuOpen}
-    onClose={handleMobileMenuClose}
-  >
-    {user ? (
-      <>
-        <MenuItem component={Link} to="/perifl">
-          Perfil
+      anchorEl={mobileMoreAnchorEl}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      id={mobileMenuId}
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={isMobileMenuOpen}
+      onClose={handleMobileMenuClose}
+    >
+      {user && data ? (
+        <>
+          <MenuItem component={Link} to={`/${data.tipo_Usuario}`}>
+            Perfil
+          </MenuItem>
+          <MenuItem onClick={logout}>Cerrar sesión</MenuItem>
+        </>
+      ) : (
+        <MenuItem component={Link} to="/acceso">
+          Iniciar sesión
         </MenuItem>
-        <MenuItem onClick={logout}>Cerrar sesión</MenuItem>
-      </>
-    ) : (
-      <MenuItem component={Link} to="/acceso">
-        Iniciar sesión
-      </MenuItem>
-    )}
-  </Menu>
-
+      )}
+    </Menu>
   );
+  
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -187,22 +212,20 @@ export const AppNavbar = (props) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-       {user ? (
-      <>
-        <MenuItem component={Link} to="/perifl">
-          Perfil
+      {user && data ? (
+        <>
+          <MenuItem component={Link} to={`/${data.tipo_Usuario}`}>
+            Perfil
+          </MenuItem>
+          <MenuItem onClick={logout}>Cerrar sesión</MenuItem>
+        </>
+      ) : (
+        <MenuItem component={Link} to="/acceso">
+          Iniciar sesión
         </MenuItem>
-        <MenuItem onClick={logout}>Cerrar sesión</MenuItem>
-      </>
-    ) : (
-      <MenuItem component={Link} to="/acceso">
-        Iniciar sesión
-      </MenuItem>
-    )}
-  </Menu>
-
+      )}
+    </Menu>
   );
-
   return (
     <Box sx={{ flexGrow: 1, marginBottom: 8, backgroundColor: "#AD2609" }}>
       <HideOnScroll {...props}>

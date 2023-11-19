@@ -16,7 +16,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useAuth } from "../../context/AuthContext";
 import { db } from "../../config/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-
+import Swal from "sweetalert2";
 function Registro() {
   const { signup } = useAuth();
   const [sent, setSent] = useState(false);
@@ -26,6 +26,7 @@ function Registro() {
   const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+
   const isPasswordValid =
     password.length > 0 &&
     /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}/.test(
@@ -81,7 +82,14 @@ function Registro() {
 
       if (querySnapshot.exists()) {
         console.log("El correo ya está registrado");
-        alert("Correo existente, prueba con otro");
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Correo existente",
+          text: "La dirección de correo electrónico ya está registrada. Por favor, utiliza otro correo electrónico.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         return;
       }
 
@@ -93,9 +101,35 @@ function Registro() {
         tipo_Usuario: "consultador",
       });
 
+      // Mostrar mensaje de registro exitoso
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "¡Registro exitoso!",
+        text: "Ahora estás registrado. ¡Bienvenido!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
+      // Puedes agregar más lógica aquí si es necesario
+
       navigate("/inicio");
     } catch (error) {
       console.log("Error:", error);
+
+      if (error.code === "auth/email-already-in-use") {
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Correo existente",
+          text: "La dirección de correo electrónico ya está registrada. Por favor, utiliza otro correo electrónico.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } else {
+        // Manejar otros errores de autenticación o de la base de datos aquí
+        // Puedes mostrar mensajes personalizados para otros tipos de errores
+      }
     }
   };
 
@@ -138,8 +172,13 @@ function Registro() {
                     onChange={(e) => {
                       const value = e.target.value;
                       const regex = /^[a-zA-Z\s]*$/;
+
                       if (regex.test(value)) {
-                        setFirstName(value);
+                        // Asegura que la primera letra sea mayúscula
+                        const formattedValue =
+                          value.charAt(0).toUpperCase() + value.slice(1);
+
+                        setFirstName(formattedValue);
                       }
                     }}
                     required
@@ -168,8 +207,13 @@ function Registro() {
                     onChange={(e) => {
                       const value = e.target.value;
                       const regex = /^[a-zA-Z\s]*$/;
+
                       if (regex.test(value)) {
-                        setLastName(value);
+                        // Asegura que la primera letra sea mayúscula
+                        const formattedValue =
+                          value.charAt(0).toUpperCase() + value.slice(1);
+
+                        setLastName(formattedValue);
                       }
                     }}
                     required
@@ -260,7 +304,6 @@ function Registro() {
                 }}
                 fullWidth
                 type="submit"
-                
                 onClick={handleSubmit}
                 disabled={isSubmitDisabled}
               >
