@@ -25,12 +25,20 @@ function Consultador() {
   const [apellido, setApellido] = useState("");
   const [foto, setFoto] = useState(null);
   const [fotoURL, setFotoURL] = useState(null);
-  const { logout, user } = useAuth();
+  const { logout, user, userInfo } = useAuth(); // Asumiendo que `userInfo` está disponible desde tu AuthContext
   const [data, setData] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
-      if (user) {
+      // Intentar obtener la información del usuario desde el almacenamiento local
+      const storedUserInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+      if (storedUserInfo) {
+        setNombre(storedUserInfo.firstName || "");
+        setApellido(storedUserInfo.lastName || "");
+        setFotoURL(storedUserInfo.url || null);
+        setData(storedUserInfo);
+      } else if (user) {
         try {
           const userDocRef = doc(firestore, `usuarios/${user.uid}`);
           const userDocSnap = await getDoc(userDocRef);
@@ -42,6 +50,9 @@ function Consultador() {
             setNombre(userData.firstName || "");
             setApellido(userData.lastName || "");
             setFotoURL(userData.url || null);
+
+            // Almacenar la información del usuario en el almacenamiento local
+            localStorage.setItem("userInfo", JSON.stringify(userData));
           }
         } catch (error) {
           console.error("Error al obtener datos del usuario:", error);

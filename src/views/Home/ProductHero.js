@@ -21,6 +21,8 @@ const ProductHero = () => {
 
           if (userDocSnap.exists()) {
             setData(userDocSnap.data());
+            // Almacenar la información del usuario en el almacenamiento local
+            localStorage.setItem("userInfo", JSON.stringify(userDocSnap.data()));
           }
         } catch (error) {
           console.error("Error al obtener datos del usuario:", error);
@@ -32,8 +34,11 @@ const ProductHero = () => {
   }, [user]);
 
   const buttonText = user ? 'Perfil' : 'Registro';
-  // Verificar si data existe y tiene la propiedad tipo_Usuario
-  const buttonLink = user && data && data.tipo_Usuario ? `/${data.tipo_Usuario}` : '/registro';
+  // Obtener la información del usuario desde el almacenamiento local
+  const localUserInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+  // Verificar si la información local existe y tiene la propiedad tipo_Usuario
+  const buttonLink = user && localUserInfo && localUserInfo.tipo_Usuario ? `/${localUserInfo.tipo_Usuario}` : '/registro';
 
   return (
     <ProductHeroLayout

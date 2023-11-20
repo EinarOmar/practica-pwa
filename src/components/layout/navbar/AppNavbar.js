@@ -30,7 +30,8 @@ import { FaEllipsisV } from "react-icons/fa";
 import { AnimatedIcon } from "./componentsNavBar";
 import { db } from "../../../config/firebase";
 import { useAuth } from "../../../context/AuthContext";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
+
 function HideOnScroll(props) {
   const { children, window } = props;
 
@@ -61,24 +62,23 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 }));
 
 export const AppNavbar = (props) => {
-  
   const [mobileOpen, setMobileOpen] = useState(false);
   const menuId = "primary-search-account-menu";
   const mobileMenuId = "primary-search-account-menu-mobile";
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const { logout, user } = useAuth();
-  const [data, setData] = useState();
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       if (user) {
         try {
-          const userDocRef =doc(db, `usuarios/${user.uid}`);
+          const userDocRef = doc(db, `usuarios/${user.uid}`);
           const userDocSnap = await getDoc(userDocRef);
 
           if (userDocSnap.exists()) {
-            setData(userDocSnap.data());
+            setUserData(userDocSnap.data());
           }
         } catch (error) {
           console.error("Error al obtener datos del usuario:", error);
@@ -160,11 +160,7 @@ export const AppNavbar = (props) => {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
-  // const handleMenuClick = user ? handleLogout : handleLogin;
-  // const handleMenuClick = user ? handleLogout : handleLogin;
-  console.log("user:", user);
-  console.log("user:", user);
-  console.log("data:", data);
+
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
@@ -181,9 +177,9 @@ export const AppNavbar = (props) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      {user && data ? (
+      {user && userData ? (
         <>
-          <MenuItem component={Link} to={`/${data.tipo_Usuario}`}>
+          <MenuItem component={Link} to={`/${userData.tipo_Usuario}`}>
             Perfil
           </MenuItem>
           <MenuItem onClick={logout}>Cerrar sesión</MenuItem>
@@ -195,7 +191,7 @@ export const AppNavbar = (props) => {
       )}
     </Menu>
   );
-  
+
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -212,9 +208,9 @@ export const AppNavbar = (props) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      {user && data ? (
+      {user && userData ? (
         <>
-          <MenuItem component={Link} to={`/${data.tipo_Usuario}`}>
+          <MenuItem component={Link} to={`/${userData.tipo_Usuario}`}>
             Perfil
           </MenuItem>
           <MenuItem onClick={logout}>Cerrar sesión</MenuItem>

@@ -34,10 +34,6 @@ export const Router = () => {
 
             <Route path="/tienda/" >
               <Route index element={<Tienda />} />
-              <Route path="ropa" element={<Ropa />} />
-              <Route path="calzado" element={<Calzado />} />
-              <Route path="equipamiento" element={<Equipamiento />} />
-              <Route path="nutricion" element={<Nutricion />} />
             </Route>
 
             <Route path='*' element={"error"} />
