@@ -1,28 +1,22 @@
 {
   "short_name": "CoffeOnline",
   "name": "CoffeOnline",
-  "description": "Aplicacion de venta de café en linea.",
+  "description": "Aplicación de venta de café en línea.",
   "icons": [
     {
-      "src": "favicon64.ico",
-      "sizes": "64x64",
-      "type": "image/x-icon",
-      "purpose": "maskable"
-    },
-    {
-      "src": "favicon192.ico",
+      "src": "logo144.png",
+      "type": "image/png",
       "sizes": "192x192",
-      "type": "image/x-icon",
-      "purpose": "maskable"
+      "purpose": "any"
     },
     {
-      "src": "logo192.jpg",
+      "src": "logo192.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "maskable"
     },
     {
-      "src": "logo512.jpg",
+      "src": "logo512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
