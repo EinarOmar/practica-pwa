@@ -1,5 +1,6 @@
 const CACHE_NAME = "coffe-online-cache-v1";
 const cacheUrls = [
+  "/public/manifest.json",
   "/",
   "/src",
   "/src/App.js",
