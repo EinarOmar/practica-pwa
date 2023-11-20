@@ -60,7 +60,7 @@ const TimelineUsSmall = ({ imgAus, imgMural,imgMural2 }) => {
               <Box
                 component="img"
                 src={imgAus}
-                alt="img-casa-de-la-cultura"
+                alt="sobrenosotros"
                 preload="true"
                 sx={{
                   width: "100%",
@@ -110,7 +110,7 @@ const TimelineUsSmall = ({ imgAus, imgMural,imgMural2 }) => {
             <Box
               component="img"
               src={imgMural}
-              alt="img-mural"
+              alt="sobrenosotros2"
               preload="true"
               sx={{ width: "100%", height: "100%", objectFit: "cover", mt: 2 }}
             />
@@ -151,7 +151,7 @@ const TimelineUsSmall = ({ imgAus, imgMural,imgMural2 }) => {
             <Box
               component="img"
               src={imgMural2}
-              alt="img-mural"
+              alt="sobrenosotros3"
               preload="true"
               sx={{ width: "100%", height: "100%", objectFit: "cover", mt: 2 }}
             />

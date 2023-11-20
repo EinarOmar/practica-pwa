@@ -123,7 +123,7 @@ export const Inicio = () => {
               </Grid>
 
               <Grid item container alignItems="center" xs={12} sm={6} md={4}>
-                <Img alt="img-intro-colaboradores" src={imagenLateral} />
+                <Img alt="img-intro-coffe" src={imagenLateral} />
               </Grid>
               <Grid
                 item
@@ -251,7 +251,7 @@ export const Inicio = () => {
                 md={7}
                 order={{ xs: 1, sm: 1 }}
               >
-                <Img alt="img-fauna" src={capuchino} />
+                <Img alt="img-cafe2" src={capuchino} />
               </Grid>
               <Grid
                 item

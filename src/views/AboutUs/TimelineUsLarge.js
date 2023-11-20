@@ -33,7 +33,7 @@ const TimelineUsLarge = ({ imgAus, imgMural, imgMural2 }) => {
                 component="img"
                 height={"100%"}
                 image={imgAus}
-                alt="img-casa-de-la-cultura"
+                alt="sobrenosotros"
                 preload="true"
               />
             </Card>
@@ -93,7 +93,7 @@ const TimelineUsLarge = ({ imgAus, imgMural, imgMural2 }) => {
                 component="img"
                 height={"100%"}
                 image={imgMural2}
-                alt="img-mural"
+                alt="sobrenosotros2"
                 preload="true"
               />
             </Card>
@@ -154,7 +154,7 @@ const TimelineUsLarge = ({ imgAus, imgMural, imgMural2 }) => {
                 component="img"
                 height={"100%"}
                 image={imgMural}
-                alt="img-casa-de-la-cultura"
+                alt="isobrenosotros3"
                 preload="true"
               />
             </Card>
