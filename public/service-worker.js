@@ -5,22 +5,23 @@ self.addEventListener("install", (event) => {
   console.log('Service Worker instalado');
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(["/", "/src", "./App.js", "/public/","../src/views/Home/png","../src/views/AboutUs"]);
-    })
-  );
-});
-
-self.addEventListener("activate", (event) => {
-  console.log('Service Worker activado');
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.filter((cacheName) => {
-          return cacheName !== CACHE_NAME;
-        }).map((cacheName) => {
-          return caches.delete(cacheName);
-        })
-      );
+      return cache.addAll([
+        "/",
+        "/src",
+        "./App.js",
+        "/public/",
+        "../src/views/Home/png/", // <- Esto debe ser un archivo específico, no un directorio
+        "../src/views/AboutUs/imagen 3.jpg",
+        "../src/views/AboutUs/imagen1.jpg",
+        "../src/views/AboutUs/imagen2.jpg",
+        // Agrega rutas específicas a tus imágenes, por ejemplo:
+        "../src/views/Home/png/cafe2.jpg",
+        "../src/views/Home/png/olla.jpg",
+        "../src/views/Home/png/capuchino.jpg",
+        "../src/views/Home/png/moka.jpg",
+        "../src/views/Home/png/moka2.jpg",
+        // ... agrega otras imágenes y archivos
+      ]);
     })
   );
 });
