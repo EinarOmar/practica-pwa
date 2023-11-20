@@ -47,15 +47,23 @@ self.addEventListener("fetch", (event) => {
         return response;
       }
 
-      return fetch(event.request).then((response) => {
+      return fetch(event.request).then((networkResponse) => {
+        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== "basic") {
+          return networkResponse;
+        }
+
         // Almacenar la nueva respuesta en la caché
-        return caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, response.clone());
-          return response;
+        const responseToCache = networkResponse.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, responseToCache);
         });
+
+        return networkResponse;
+      }).catch((error) => {
+        console.error("Error en el evento fetch:", error);
+        // Si no hay conexión a internet y no se encuentra en la caché, devolver una respuesta predeterminada
+        return caches.match("/offline.html"); // Ajusta la URL según sea necesario
       });
-    }).catch((error) => {
-      console.error("Error en el evento fetch:", error);
     })
   );
 });
