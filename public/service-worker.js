@@ -2,8 +2,8 @@ const CACHE_NAME = "coffe-online-cache-v1";
 const cacheUrls = [
   "/",
   "/src",
-  "./App.js",
-  "/public/",
+  "/src/App.js",
+  "/public",
   "../src/views/AboutUs/imagen 3.jpg",
   "../src/views/AboutUs/imagen1.jpg",
   "../src/views/AboutUs/imagen2.jpg",
@@ -12,9 +12,6 @@ const cacheUrls = [
   "../src/views/Home/png/capuchino.jpg",
   "../src/views/Home/png/moka.jpg",
   "../src/views/Home/png/moka2.jpg",
-  "../src/views/AboutUs/imagen1.jpg",
-  "../src/views/AboutUs/imagen2.jpg",
-  "../src/views/AboutUs/imagen3.jpg",
   // ... agregar otras rutas y archivos
 ];
 
@@ -45,13 +42,20 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   event.respondWith(
-    caches
-      .match(event.request)
-      .then((response) => {
-        return response || fetch(event.request);
-      })
-      .catch((error) => {
-        console.error("Error en el evento fetch:", error);
-      })
+    caches.match(event.request).then((response) => {
+      if (response) {
+        return response;
+      }
+
+      return fetch(event.request).then((response) => {
+        // Almacenar la nueva respuesta en la caché
+        return caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, response.clone());
+          return response;
+        });
+      });
+    }).catch((error) => {
+      console.error("Error en el evento fetch:", error);
+    })
   );
 });
