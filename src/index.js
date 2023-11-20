@@ -1,13 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import App from './App';
-import { AuthProvider } from './context/AuthContext';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-    <AuthProvider>
-      <App />
-    </AuthProvider>
+import { AuthProvider } from './context/AuthContext';
+ReactDOM.render(
+  <AuthProvider>
+  <App />
+</AuthProvider>,
+  document.getElementById('root')
 );
 
- 
+serviceWorkerRegistration.register();
