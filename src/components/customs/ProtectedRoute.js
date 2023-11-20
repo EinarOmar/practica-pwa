@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
-import { Navigate }        from "react-router-dom";
-import { doc, getDoc  }    from "firebase/firestore";
-import "firebase/compat/firestore";
-import "firebase/compat/storage";
-import { useAuth }         from "../../context/AuthContext";
-import { db }              from "../../config/firebase/firebaseDB";
+import { Navigate } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
+import { useAuth } from "../../context/AuthContext";
+import { db } from "../../config/firebase";
 import { LoaderAnimation } from "./LoaderAnimation";
 
 export function ProtectedRoute({ children }) {
@@ -12,32 +10,34 @@ export function ProtectedRoute({ children }) {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    // Obtiene los datos del usuario desde Firestore
     const consultaDato = async () => {
-      const referencia = doc(db, `usuarios/${user.uid}`); // Cambia el ID estático por user.uid
-      const docSnap = await getDoc(referencia);
-      if (docSnap.exists()) {
-        setData(docSnap.data());
-      } else {
-        console.log("No se encontró el documento");
+      if (user) {
+        try {
+          const referencia = doc(db, `usuarios/${user.uid}`);
+          const docSnap = await getDoc(referencia);
+
+          if (docSnap.exists()) {
+            setData(docSnap.data());
+          } else {
+            console.log("No se encontró el documento");
+          }
+        } catch (error) {
+          console.error("Error al obtener datos del usuario:", error);
+        }
       }
     };
 
-    if (user) {
-      consultaDato();
-    }
+    // No necesitas verificar 'user' aquí, ya que este efecto se ejecutará si 'user' cambia
+    consultaDato();
   }, [user]);
 
   if (loading) {
-    return <LoaderAnimation/>;
+    return <LoaderAnimation />;
   }
 
+  // Permitir el acceso si el usuario está logeado, incluso si no hay datos disponibles actualmente
   if (!user) {
     return <Navigate to="/acceso" />;
-  } else if (data === null) {
-    return <LoaderAnimation/>;
-  } else if (!(data.rol === "consultador")) {
-    return <Navigate to="/inicio" />;
   } else {
     return <>{children}</>;
   }

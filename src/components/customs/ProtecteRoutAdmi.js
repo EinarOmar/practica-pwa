@@ -4,7 +4,7 @@ import { doc, getDoc }     from "firebase/firestore";
 import "firebase/compat/storage";
 import "firebase/compat/firestore";
 import { useAuth }         from "../../context/AuthContext";
-import { db }              from "../../config/firebase/firebaseDB";
+import { db }              from "../../config/firebase";
 import { LoaderAnimation } from "./LoaderAnimation";
 
 export function ProtecteRoutAdmi({ children }) {
@@ -36,7 +36,7 @@ export function ProtecteRoutAdmi({ children }) {
     return <Navigate to="/acceso" />;
   } else if (data === null) {
     return <LoaderAnimation/>;
-  } else if (!(data.rol === "administrador")) {
+  } else if (!(data.tipo_Usuario === "administrador")) {
     return <Navigate to="/inicio" />;
   } else {
     return <>{children}</>;
