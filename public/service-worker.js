@@ -5,7 +5,7 @@ self.addEventListener("install", (event) => {
   console.log('Service Worker instalado');
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(["/", "/src", "./App.js", "/public/manifest.json"]);
+      return cache.addAll(["/", "/src", "./App.js", "/public/","../src/views/Home/png","../src/views/AboutUs"]);
     })
   );
 });
