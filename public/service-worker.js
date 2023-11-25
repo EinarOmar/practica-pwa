@@ -13,7 +13,6 @@ const cacheUrls = [
   "../src/views/Home/png/capuchino.jpg",
   "../src/views/Home/png/moka.jpg",
   "../src/views/Home/png/moka2.jpg",
-  // ... agregar otras rutas y archivos
 ];
 
 self.addEventListener("install", (event) => {

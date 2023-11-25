@@ -18,7 +18,7 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { storage, firestore } from "../../config/firebase";
+import { storage, db } from "../../config/firebase";
 
 function Consultador() {
   const [nombre, setNombre] = useState("");
@@ -40,7 +40,7 @@ function Consultador() {
         setData(storedUserInfo);
       } else if (user) {
         try {
-          const userDocRef = doc(firestore, `usuarios/${user.uid}`);
+          const userDocRef = doc(db, `usuarios/${user.uid}`);
           const userDocSnap = await getDoc(userDocRef);
 
           if (userDocSnap.exists()) {
@@ -113,7 +113,7 @@ function Consultador() {
 
     // Actualizar la información del usuario
     try {
-        const userDocRef = doc(firestore, "usuarios", user.uid);
+        const userDocRef = doc(db, "usuarios", user.uid);
     
         function capitalizeFirstLetter(string) {
           return string.charAt(0).toUpperCase() + string.slice(1);

@@ -16,7 +16,7 @@ import {
   updateDoc, // Add this import
 } from "firebase/firestore";
 import { ref, uploadBytes } from "firebase/storage";
-import { storage, firestore } from "../../config/firebase";
+import { storage, db } from "../../config/firebase";
 import { getDownloadURL } from "firebase/storage";
 
 
@@ -78,7 +78,7 @@ function Administrador() {
       // Desactivar el botón de envío mientras se carga la imagen
       document.getElementById("submit-button").disabled = true;
 
-      const productosCollection = collection(firestore, "productos");
+      const productosCollection = collection(db, "productos");
 
       const newProduct = {
         nombre,
