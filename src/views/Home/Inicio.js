@@ -1,20 +1,12 @@
-import * as React from "react";
+import React, { useState,useEffect } from "react";
 import ProductHero from "./ProductHero";
-import ProductValues from "./ProductValues";
-import ProductHowItWorks from "./ProductHowItWorks";
 import Typography from "@mui/material/Typography"; // Add this import
 import { WavyDivider } from "../../components/customs/WavyDivider";
-import {
-  ArrowForward,
-  Directions,
-  LocalFlorist,
-  Pets,
-} from "@mui/icons-material";
+
 import {
   Paper,
   Button,
   Box,
-  useMediaQuery,
   Grid,
   useTheme,
   Container,
@@ -23,13 +15,50 @@ import {
 import imagenLateral from "../Home/png/cafe2.jpg";
 import olla from "../Home/png/olla.jpg";
 import capuchino from "../Home/png/capuchino.jpg";
-import moka from "../Home/png/moka.jpg";
 import moka2 from "../Home/png/moka2.jpg";
 
+import { app } from "../../config/firebaseConnection";
 import LocalCafeIcon from "@mui/icons-material/LocalCafe";
 import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
 export const Inicio = () => {
+  const [productosCache, setProductosCache] = useState([]);
+  useEffect(() => {
+    const fetchDataAndCache = async () => {
+      try {
+        const query = app.firestore().collection("productos");
+        const docList = await query.get();
+
+        if (!docList.empty) {
+          const proyectosArray = docList.docs.map((doc) => ({
+            id: doc.id,
+            data: doc.data(),
+          }));
+
+          // Guardar en caché los datos obtenidos
+          localStorage.setItem(
+            "productosCache",
+            JSON.stringify(proyectosArray)
+          );
+
+          // Almacenar los datos en el estado local
+          setProductosCache(proyectosArray);
+          console.log("Datos gurdados en el cache");
+        }
+      } catch (error) {
+        console.error("Error al obtener datos:", error);
+      }
+    };
+
+    // Verificar si hay datos en caché al iniciar el componente
+    const cachedData = localStorage.getItem("productosCache");
+    if (cachedData) {
+      setProductosCache(JSON.parse(cachedData));
+    } else {
+      // Si no hay datos en caché, obtener datos de Firebase y guardar en caché
+      fetchDataAndCache();
+    }
+  }, []);
   const theme = useTheme();
 
   // Check if theme is defined

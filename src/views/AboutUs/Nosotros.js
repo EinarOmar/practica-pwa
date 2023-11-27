@@ -4,7 +4,7 @@ import { Grid, Typography, Paper, Box } from "@mui/material";
 import { HomeRounded, BusinessRounded } from "@mui/icons-material";
 import imgAus from "./imagen1.jpg";
 import imgMural from "./imagen2.jpg";
-import imgMural2 from "./imagen 3.jpg";
+import imgMural2 from "./imagen3.jpg";
 
 import TimelineUsLarge from "./TimelineUsLarge";
 import TimelineUsSmall from './TimelineUsSmall';

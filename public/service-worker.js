@@ -1,18 +1,17 @@
 const CACHE_NAME = "coffe-online-cache-v1";
 const cacheUrls = [
-  "/public/manifest.json",
-  "/",
-  "/src",
-  "/src/App.js",
-  "/public",
-  "../src/views/AboutUs/imagen 3.jpg",
-  "../src/views/AboutUs/imagen1.jpg",
-  "../src/views/AboutUs/imagen2.jpg",
-  "../src/views/Home/png/cafe2.jpg",
-  "../src/views/Home/png/olla.jpg",
-  "../src/views/Home/png/capuchino.jpg",
-  "../src/views/Home/png/moka.jpg",
-  "../src/views/Home/png/moka2.jpg",
+  "./manifest.json",
+  "./",
+  "./src",
+  "./src/App.js",
+  "./src/views/AboutUs/imagen3.jpg",
+  "./src/views/AboutUs/imagen1.jpg",
+  "./src/views/AboutUs/imagen2.jpg",
+  "./src/views/Home/png/cafe2.jpg",
+  "./src/views/Home/png/olla.jpg",
+  "./src/views/Home/png/capuchino.jpg",
+  "./src/views/Home/png/moka.jpg",
+  "./src/views/Home/png/moka2.jpg",
 ];
 
 self.addEventListener("install", (event) => {
@@ -48,7 +47,11 @@ self.addEventListener("fetch", (event) => {
       }
 
       return fetch(event.request).then((networkResponse) => {
-        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== "basic") {
+        if (
+          !networkResponse ||
+          networkResponse.status !== 200 ||
+          networkResponse.type !== "basic"
+        ) {
           return networkResponse;
         }
 
@@ -59,11 +62,11 @@ self.addEventListener("fetch", (event) => {
         });
 
         return networkResponse;
-      }).catch((error) => {
-        console.error("Error en el evento fetch:", error);
-        // Si no hay conexión a internet y no se encuentra en la caché, devolver una respuesta predeterminada
-        return caches.match("/offline.html"); // Ajusta la URL según sea necesario
       });
+    }).catch((error) => {
+      console.error("Error en el evento fetch:", error);
+      // Si no hay conexión a internet y no se encuentra en la caché, devolver una respuesta predeterminada
+      return caches.match("/offline.html"); // Ajusta la URL según sea necesario
     })
   );
 });

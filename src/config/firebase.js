@@ -5,8 +5,6 @@ import { getAuth } from "firebase/auth";
 import { getMessaging } from 'firebase/messaging'
 import { getAnalytics } from 'firebase/analytics'
 
-
-
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCDaApgjCajU24BDH9toQVSTG_OV9HgiDI",
@@ -19,7 +17,6 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
-
 export const storage = getStorage(app);
 export const firestore = getFirestore(app);
 export const auth = getAuth(app);

@@ -46,39 +46,55 @@ const Calzado = () => {
   };
   const obtenerInfo = async () => {
     let query = app.firestore().collection("productos");
-
+  
     // Apply filters if color is selected
     if (filters.color && filters.color !== "Todos") {
       query = query.where("tipoCafe", "==", filters.color);
     }
-
+  
     // Apply filters if size is selected
     if (filters.talla && filters.talla !== "Todos") {
       query = query.where("pais", "==", filters.talla);
     }
-
+  
     // Apply search term if provided
     if (busqueda.trim() !== "") {
       query = query
         .where("nombre", ">=", busqueda.trim())
         .where("nombre", "<=", busqueda.trim() + "\uf8ff");
     }
-
+  
     try {
-      const docList = await query.get();
-
-      if (!docList.empty) {
-        const proyectosArray = docList.docs.map((doc) => ({
-          id: doc.id,
-          data: doc.data(),
-        }));
-        setProyectos(proyectosArray);
+      const response = await caches.match(query); // Intentar obtener la respuesta del caché
+  
+      if (response) {
+        // Si la respuesta está en el caché, usarla
+        const data = await response.json();
+        setProyectos(data);
+      } else {
+        // Si la respuesta no está en el caché, obtenerla de Firebase
+        const docList = await query.get();
+  
+        if (!docList.empty) {
+          const proyectosArray = docList.docs.map((doc) => ({
+            id: doc.id,
+            data: doc.data(),
+          }));
+  
+          // Guardar en el caché para futuras solicitudes
+          const cacheResponse = new Response(JSON.stringify(proyectosArray));
+          caches.open("coffe-online-cache-v1").then((cache) => {
+            cache.put(query, cacheResponse);
+          });
+  
+          setProyectos(proyectosArray);
+        }
       }
     } catch (error) {
       console.error("Error al obtener datos:", error);
     }
   };
-
+  
   useEffect(() => {
     obtenerInfo();
   }, [filters, busqueda]);

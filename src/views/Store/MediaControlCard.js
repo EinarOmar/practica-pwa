@@ -9,11 +9,12 @@ import {
   ChevronRightRounded,
   LocalGroceryStoreRounded,
 } from "@mui/icons-material";
+import offlineLogo from '../../components/layout/footer/logo144.jpg';  // Ruta a tu imagen de logo
 
 const MediaControlCard = ({ proyecto, handleClickOpen }) => {
   return (
     <Card elevation={5} sx={{ transition: "0.2s", "&:hover": { transform: "scale(1.03)" }, display: "flex", flexDirection: { xs: "column", sm: "row", md: "row" }, minHeight: { xs: 100, sm: 150, md: 200, lg: 250, xl: "100%" }, borderRadius: 2 }}>
-      <CardMedia onClick={() => handleClickOpen(proyecto)} component="img" sx={{ maxWidth: { xs: "100%", sm: 200, md: 350, lg: 180, xl: 180 }, height: { xs: 200, sm: 200, md: 200, lg: 250, xl: 250 }, objectFit: "cover", "&:hover": { cursor: "pointer" } }} image={proyecto.data.imageURL} alt={proyecto.data.nombre} />
+      <CardMedia onClick={() => handleClickOpen(proyecto)} component="img" sx={{ maxWidth: { xs: "100%", sm: 200, md: 350, lg: 180, xl: 180 }, height: { xs: 200, sm: 200, md: 200, lg: 250, xl: 250 }, objectFit: "cover", "&:hover": { cursor: "pointer" } }} image={navigator.onLine ? proyecto.data.imageURL : offlineLogo} alt={proyecto.data.nombre} />
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <CardContent sx={{ flex: "1 0 auto" }}>
           <Typography component="div" variant="h5" color="text.secondary">
