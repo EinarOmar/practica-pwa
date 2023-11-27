@@ -88,12 +88,17 @@ const Calzado = () => {
           });
   
           setProyectos(proyectosArray);
+        } else {
+          // Si no hay datos en la caché y no se encuentran en Firebase, puedes manejarlo de acuerdo a tus necesidades.
+          console.log("No se encontraron datos en la caché ni en Firebase.");
+          // Aquí podrías realizar una nueva consulta directa a Firebase si lo prefieres.
         }
       }
     } catch (error) {
       console.error("Error al obtener datos:", error);
     }
   };
+  
   
   useEffect(() => {
     obtenerInfo();
