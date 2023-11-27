@@ -17,8 +17,14 @@ import {
   updateDoc,
   serverTimestamp,
 } from "firebase/firestore";
+import {Box,useMediaQuery} from "@mui/material";
+
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage, db } from "../../config/firebase";
+import { messaging } from "../../config/firebase";
+import { getToken, onMessage } from "firebase/messaging";
+import { ToastContainer, toast } from 'react-toastify'
+import "react-toastify/dist/ReactToastify.css"
 
 function Consultador() {
   const [nombre, setNombre] = useState("");
@@ -27,6 +33,27 @@ function Consultador() {
   const [fotoURL, setFotoURL] = useState(null);
   const { logout, user, userInfo } = useAuth(); // Asumiendo que `userInfo` está disponible desde tu AuthContext
   const [data, setData] = useState();
+  const [name, setName] = useState("");
+  const isSmallScreen = useMediaQuery('(max-width:900px)');
+  const activarMensajes = async () => {
+    try {
+      const token = await getToken(messaging, {
+        vapidKey: "BLZ-xsF8t0FmBrjjKGgvRClAxRdX6Dpe2qp_k0WF-q-62T7KxKJ-EeDyCxbmJGAsf-7mTP61nOP4PuyPEC1ShAw"
+      });
+  
+      console.log("Tu token:", token);
+      setName(token)
+    } catch (error) {
+      console.error("Error al generar el token:", error.message);
+    }
+  }
+
+  React.useEffect(()=>{
+    onMessage(messaging, message=>{
+      console.log("Tu mensaje:", message);
+      toast(message.notification.title);
+    })
+  })
 
   useEffect(() => {
     const fetchData = async () => {
@@ -184,6 +211,15 @@ function Consultador() {
     >
       <Card style={{ maxWidth: 400 }}>
         <CardContent>
+        <Typography sx={{fontStyle: "italic"}} variant={isSmallScreen ? "body1" : "h5"}>
+            Tu token:  {name}
+          </Typography>
+          {/* BOTON EDITAR PERFIL */}
+          <Grid item md={3} sm={12} xs={12}>
+            <Box sx={{ height: "100%", display: "flex", alignItems: "flex-end", p: 3, justifyContent:"center" }}>
+              <Button variant="contained" startIcon={<EditIcon/>} color="secondary" aria-label='abrir ventana para editar el perfil' onClick={activarMensajes}>Activar Notificaciones</Button>
+            </Box>
+          </Grid>
           <Typography variant="h4" align="center" gutterBottom>
             Bienvenido {nombre}
           </Typography>

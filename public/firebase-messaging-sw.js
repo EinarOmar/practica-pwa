@@ -1,15 +1,37 @@
-// import { onBackgroundMessage } from "firebase/messaging";
+importScripts(
+  "https://www.gstatic.com/firebasejs/10.6.0/firebase-app-compat.js"
+);
+importScripts(
+  "https://www.gstatic.com/firebasejs/10.6.0/firebase-messaging-compat.js"
+);
 
-// // Este evento se dispara cuando llega un mensaje en segundo plano
-// onBackgroundMessage((payload) => {
-//   console.log("Mensaje recibido en segundo plano:", payload);
 
-//   // Puedes personalizar la lógica aquí para manejar la notificación en segundo plano
-//   const notificationOptions = {
-//     body: payload.notification.body,
-//     icon: payload.notification.icon,
-//   };
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyCDaApgjCajU24BDH9toQVSTG_OV9HgiDI",
+    authDomain: "coffeonline-c77cb.firebaseapp.com",
+    projectId: "coffeonline-c77cb",
+    storageBucket: "coffeonline-c77cb.appspot.com",
+    messagingSenderId: "5126156134",
+    appId: "1:5126156134:web:2135ff9e62894d529e22a7",
+    measurementId: "G-VCL8VPNKBV"
+  };
 
-//   // Mostrar la notificación en segundo plano
-//   self.registration.showNotification(payload.notification.title, notificationOptions);
-// });
+// Initialize Firebase
+const app = firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging(app);
+
+messaging.onBackgroundMessage( payload => {
+  console.log("Recibiste mensaje mientras estabas ausente");
+  // Previo a mostrar notificación
+  const notificationTitle = payload.notification.title;
+  const notificactionOptios = {
+    body: payload.notification.body,
+    icon: "./logo192.png",
+  };
+
+  return self.registration.showNotification(
+    notificationTitle,
+    notificactionOptios
+  );
+});
