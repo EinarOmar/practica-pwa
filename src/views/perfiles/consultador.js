@@ -217,7 +217,13 @@ function Consultador() {
           {/* BOTON EDITAR PERFIL */}
           <Grid item md={3} sm={12} xs={12}>
             <Box sx={{ height: "100%", display: "flex", alignItems: "flex-end", p: 3, justifyContent:"center" }}>
-              <Button variant="contained" startIcon={<EditIcon/>} color="secondary" aria-label='abrir ventana para editar el perfil' onClick={activarMensajes}>Activar Notificaciones</Button>
+              <Button variant="contained" startIcon={<EditIcon/>} color="secondary" aria-label='abrir ventana para editar el perfil' onClick={activarMensajes} sx={{
+                    backgroundColor: "#886750",
+                    ":hover": {
+                      backgroundColor: "#886750",
+                    },
+                    transition: "background-color 0.3s",
+                  }}>Activar Notificaciones</Button>
             </Box>
           </Grid>
           <Typography variant="h4" align="center" gutterBottom>
